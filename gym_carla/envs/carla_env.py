@@ -119,8 +119,8 @@ class CarlaEnv(gym.Env):
         # Lidar sensor
         self.lidar_data = None
         self.lidar_height = 2.1
-        self.lidar_trans = carla.Transform(
-            carla.Location(x=0.0, z=self.lidar_height))
+        self.lidar_trans = carla.Transform(carla.Location(
+            x=0.0, y=0.0, z=self.lidar_height), carla.Rotation(0, 90, 0))
         self.lidar_bp = self.world.get_blueprint_library().find('sensor.lidar.ray_cast')
         self.lidar_bp.set_attribute('channels', '32')
         self.lidar_bp.set_attribute('range', '5000')
@@ -530,14 +530,14 @@ class CarlaEnv(gym.Env):
         # Get point cloud data
         for location in self.lidar_data:
             point_cloud.append(
-                [location.point.x, location.point.y, -location.point.z])
+                [location.point.x, location.point.y, location.point.z])
         point_cloud = np.array(point_cloud)
         # Separate the 3D space to bins for point cloud, x and y is set according to self.lidar_bin,
         # and z is set to be two bins.
-        y_bins = np.arange(-(self.obs_range - self.d_behind),
+        x_bins = np.arange(-(self.obs_range - self.d_behind),
                            self.d_behind+self.lidar_bin, self.lidar_bin)
-        x_bins = np.arange(-self.obs_range/2, self.obs_range /
-                           2+self.lidar_bin, self.lidar_bin)
+        y_bins = np.arange(-self.obs_range/2,
+                           self.obs_range/2+0.01, self.lidar_bin)
         z_bins = [-self.lidar_height-1, -self.lidar_height+0.25, 1]
         # Get lidar image according to the bins
         lidar, _ = np.histogramdd(point_cloud, bins=(x_bins, y_bins, z_bins))

@@ -39,7 +39,7 @@ def main():
         'max_waypt': 12,  # maximum number of waypoints
         'obs_range': 32,  # observation range (meter)
         'lidar_bin': 0.125,  # bin size of lidar sensor (meter)
-        'd_behind': 12,  # distance behind the ego vehicle (meter)
+        'd_behind': 16,  # distance behind the ego vehicle (meter)
         'out_lane_thres': 2.0,  # threshold for out of lane
         'desired_speed': 8,  # desired speed (m/s)
         'max_ego_spawn_times': 200,  # maximum times to spawn ego vehicle
